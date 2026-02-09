@@ -78,7 +78,7 @@ const handlePreviewPicture = ({ name, link }) => {
   openModalWindow(imageModalWindow);
 };
 
-const handleProfileFormSubmit = async (evt) => {
+const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
 
   const form = evt.target;
@@ -88,7 +88,7 @@ const handleProfileFormSubmit = async (evt) => {
   submitButton.disabled = true;
   submitButton.textContent = "Сохранение...";
 
-  await setUserInfo({
+  setUserInfo({
     name: profileTitleInput.value,
     about: profileDescriptionInput.value,
   })
@@ -106,7 +106,7 @@ const handleProfileFormSubmit = async (evt) => {
     });
 };
 
-const handleAvatarFromSubmit = async (evt) => {
+const handleAvatarFormSubmit = (evt) => {
   evt.preventDefault();
 
   const form = evt.target;
@@ -116,7 +116,7 @@ const handleAvatarFromSubmit = async (evt) => {
   submitButton.disabled = true;
   submitButton.textContent = "Сохранение...";
 
-  await setUserAvatar({
+  setUserAvatar({
     avatar: avatarInput.value,
   })
     .then((userData) => {
@@ -132,7 +132,7 @@ const handleAvatarFromSubmit = async (evt) => {
     });
 };
 
-const handleCardFormSubmit = async (evt) => {
+const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
 
   const form = evt.target;
@@ -142,7 +142,7 @@ const handleCardFormSubmit = async (evt) => {
   submitButton.disabled = true;
   submitButton.textContent = "Создание...";
 
-  await sendNewCard({
+  sendNewCard({
     name: cardNameInput.value,
     link: cardLinkInput.value,
   })
@@ -177,7 +177,7 @@ const handleCardFormSubmit = async (evt) => {
 // EventListeners
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
-avatarForm.addEventListener("submit", handleAvatarFromSubmit);
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 openProfileFormButton.addEventListener("click", () => {
   profileTitleInput.value = profileTitle.textContent;

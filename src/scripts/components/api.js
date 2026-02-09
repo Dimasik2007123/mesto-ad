@@ -11,21 +11,21 @@ const getResponseData = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 };
 
-export const getUserInfo = async () => {
+export const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     // Запрос к API-серверу
     headers: config.headers, // Подставляем заголовки
   }).then(getResponseData); // Проверяем успешность выполнения запроса
 };
 
-export const getCardList = async () => {
+export const getCardList = () => {
   return fetch(`${config.baseUrl}/cards`, {
     // Запрос к API-серверу
     headers: config.headers, // Подставляем заголовки
   }).then(getResponseData); // Проверяем успешность выполнения запроса
 };
 
-export const setUserInfo = async ({ name, about }) => {
+export const setUserInfo = ({ name, about }) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
@@ -36,7 +36,7 @@ export const setUserInfo = async ({ name, about }) => {
   }).then(getResponseData);
 };
 
-export const setUserAvatar = async ({ avatar }) => {
+export const setUserAvatar = ({ avatar }) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
@@ -46,7 +46,7 @@ export const setUserAvatar = async ({ avatar }) => {
   }).then(getResponseData);
 };
 
-export const sendNewCard = async ({ name, link }) => {
+export const sendNewCard = ({ name, link }) => {
   return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
@@ -57,14 +57,14 @@ export const sendNewCard = async ({ name, link }) => {
   }).then(getResponseData);
 };
 
-export const removeCard = async (cardID) => {
+export const removeCard = (cardID) => {
   return fetch(`${config.baseUrl}/cards/${cardID}`, {
     method: "DELETE",
     headers: config.headers,
   }).then(getResponseData);
 };
 
-export const changeLikeCardStatus = async (cardID, isLiked) => {
+export const changeLikeCardStatus = (cardID, isLiked) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardID}`, {
     method: isLiked ? "DELETE" : "PUT",
     headers: config.headers,
