@@ -96,5 +96,4 @@ const enableValidation = (settings) => {
   });
 };
 
-
 export { enableValidation, clearValidation };
