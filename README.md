@@ -16,21 +16,31 @@ Live-server является расширением VSCode
 
 1. Склонируйте репозиторий:
 
-```git clone https://github.com/Dimasik2007123/mesto-ad.git
- cd mesto-ad```
+```
+  git clone https://github.com/Dimasik2007123/mesto-ad.git
+  cd mesto-ad
+```
 
 2. Установите зависимости:
 
-```npm install```
+```
+  npm install
+```
 
 3. Запустите проект в режиме разработки:
 
-```npm run dev```
+```
+  npm run dev
+```
 
 4. Собрать production-версию:
 
-```npm run build```
+```
+  npm run build
+```
 
 5. Опубликовать на GitHub Pages (в репозиторий mesto-production):
 
-```npm run deploy```
+```
+  npm run deploy
+```
