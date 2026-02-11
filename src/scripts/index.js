@@ -60,6 +60,8 @@ const imageModalWindow = document.querySelector(".popup_type_image");
 const imageElement = imageModalWindow.querySelector(".popup__image");
 const imageCaption = imageModalWindow.querySelector(".popup__caption");
 
+const logoElement = document.querySelector(".header__logo");
+
 const openProfileFormButton = document.querySelector(".profile__edit-button");
 const openCardFormButton = document.querySelector(".profile__add-button");
 
@@ -70,6 +72,98 @@ const profileAvatar = document.querySelector(".profile__image");
 const avatarFormModalWindow = document.querySelector(".popup_type_edit-avatar");
 const avatarForm = avatarFormModalWindow.querySelector(".popup__form");
 const avatarInput = avatarForm.querySelector(".popup__input");
+
+const formatDate = (date) =>
+  date.toLocaleDateString("ru-RU", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+const usersStatsModalWindow = document.querySelector(".popup_type_info");
+const usersStatsInfoTitle =
+  usersStatsModalWindow.querySelector(".popup__title");
+const usersStatsInfoList = usersStatsModalWindow.querySelector(".popup__info");
+const usersStatsInfoUserTitle =
+  usersStatsModalWindow.querySelector(".popup__text");
+const usersStatsInfoUserList =
+  usersStatsModalWindow.querySelector(".popup__list");
+
+const createInfoString = (label, value) => {
+  const template = document.querySelector("#popup-info-definition-template");
+  const element = template.content.cloneNode(true);
+
+  element.querySelector(".popup__info-term").textContent = label;
+  element.querySelector(".popup__info-description").textContent = value;
+
+  return element;
+};
+
+const createUserElement = (name) => {
+  const template = document.querySelector("#popup-info-user-preview-template");
+  const element = template.content.cloneNode(true);
+
+  element.querySelector(".popup__list-item_type_badge").textContent = name;
+
+  return element;
+};
+
+const handleLogoClick = () => {
+  getCardList()
+    .then((cards) => {
+      usersStatsInfoList.innerHTML = "";
+      usersStatsInfoUserList.innerHTML = "";
+
+      usersStatsInfoTitle.textContent = "Статистика пользователей";
+      usersStatsInfoUserTitle.textContent = "Все пользователи";
+
+      const users = new Map();
+
+      cards.forEach((card) => {
+        const userName = card.owner.name;
+        const currentCount = users.get(userName) || 0;
+        users.set(userName, currentCount + 1);
+      });
+
+      usersStatsInfoList.append(
+        createInfoString("Всего карточек:", cards.length),
+      );
+
+      usersStatsInfoList.append(
+        createInfoString(
+          "Первая создана:",
+          formatDate(new Date(cards[cards.length - 1].createdAt)),
+        ),
+      );
+      usersStatsInfoList.append(
+        createInfoString(
+          "Последняя создана:",
+          formatDate(new Date(cards[0].createdAt)),
+        ),
+      );
+
+      usersStatsInfoList.append(
+        createInfoString("Всего пользователей:", users.size),
+      );
+
+      usersStatsInfoList.append(
+        createInfoString(
+          "Максимум карточек от одного:",
+          Math.max(...users.values()),
+        ),
+      );
+
+      Array.from(users.keys()).forEach((name) => {
+        const element = createUserElement(name);
+        usersStatsInfoUserList.append(element);
+      });
+
+      openModalWindow(usersStatsModalWindow);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const handlePreviewPicture = ({ name, link }) => {
   imageElement.src = link;
@@ -178,6 +272,9 @@ const handleCardFormSubmit = (evt) => {
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 avatarForm.addEventListener("submit", handleAvatarFormSubmit);
+
+logoElement.addEventListener("click", handleLogoClick);
+setCloseModalWindowEventListeners(usersStatsModalWindow);
 
 openProfileFormButton.addEventListener("click", () => {
   profileTitleInput.value = profileTitle.textContent;
