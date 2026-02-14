@@ -69,6 +69,10 @@ const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const profileAvatar = document.querySelector(".profile__image");
 
+const removeCardModalWindow = document.querySelector(".popup_type_remove-card");
+const removeCardForm = removeCardModalWindow.querySelector(".popup__form");
+let cardToDelete = null;
+
 const avatarFormModalWindow = document.querySelector(".popup_type_edit-avatar");
 const avatarForm = avatarFormModalWindow.querySelector(".popup__form");
 const avatarInput = avatarForm.querySelector(".popup__input");
@@ -106,6 +110,37 @@ const createUserElement = (name) => {
   element.querySelector(".popup__list-item_type_badge").textContent = name;
 
   return element;
+};
+
+const handleDeleteCardClick = (cardElement) => {
+  cardToDelete = cardElement;
+  cardToDelete.dataset.id = cardElement.id;
+  openModalWindow(removeCardModalWindow);
+};
+
+const handleRemoveCardSubmit = (evt) => {
+  evt.preventDefault();
+
+  const form = evt.target;
+  const submitButton = form.querySelector(".popup__button");
+
+  const initialText = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "Удаление...";
+
+  removeCard(cardToDelete.dataset.id)
+    .then(() => {
+      deleteCard(cardToDelete);
+      closeModalWindow(removeCardModalWindow);
+      cardToDelete = null;
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      submitButton.textContent = initialText;
+    });
 };
 
 const handleLogoClick = () => {
@@ -251,8 +286,7 @@ const handleCardFormSubmit = (evt) => {
             else minusLikeCount(cardLikeCounter);
           },
           onDeleteCard: (cardElement) => {
-            removeCard(cardElement.id);
-            deleteCard(cardElement);
+            handleDeleteCardClick(cardElement);
           },
           ownerID: cardData.owner._id,
         }),
@@ -275,6 +309,8 @@ avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 logoElement.addEventListener("click", handleLogoClick);
 setCloseModalWindowEventListeners(usersStatsModalWindow);
+
+removeCardForm.addEventListener("submit", handleRemoveCardSubmit);
 
 openProfileFormButton.addEventListener("click", () => {
   profileTitleInput.value = profileTitle.textContent;
@@ -325,8 +361,7 @@ Promise.all([getCardList(), getUserInfo()])
             else minusLikeCount(cardLikeCounter);
           },
           onDeleteCard: (cardElement) => {
-            removeCard(cardElement.id);
-            deleteCard(cardElement);
+            handleDeleteCardClick(cardElement);
           },
           ownerID: userData._id,
         }),
