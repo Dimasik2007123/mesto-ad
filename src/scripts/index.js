@@ -114,7 +114,7 @@ const createUserElement = (name) => {
 
 const handleDeleteCardClick = (cardElement) => {
   cardToDelete = cardElement;
-  cardToDelete.dataset.id = cardElement.id;
+  //cardToDelete.dataset.id = cardElement.id;
   openModalWindow(removeCardModalWindow);
 };
 
@@ -128,7 +128,7 @@ const handleRemoveCardSubmit = (evt) => {
   submitButton.disabled = true;
   submitButton.textContent = "Удаление...";
 
-  removeCard(cardToDelete.dataset.id)
+  removeCard(cardToDelete.id)
     .then(() => {
       deleteCard(cardToDelete);
       closeModalWindow(removeCardModalWindow);
