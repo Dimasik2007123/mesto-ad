@@ -5,13 +5,7 @@
 
   Из index.js не допускается что то экспортировать
 */
-import {
-  createCardElement,
-  deleteCard,
-  likeCard,
-  plusLikeCount,
-  minusLikeCount,
-} from "./components/card.js";
+import { createCardElement, deleteCard, likeCard } from "./components/card.js";
 import {
   openModalWindow,
   closeModalWindow,
@@ -112,9 +106,8 @@ const createUserElement = (name) => {
   return element;
 };
 
-const handleDeleteCardClick = (cardElement) => {
-  cardToDelete = cardElement;
-  //cardToDelete.dataset.id = cardElement.id;
+const handleDeleteCardClick = (cardElement, cardId) => {
+  cardToDelete = { element: cardElement, id: cardId };
   openModalWindow(removeCardModalWindow);
 };
 
@@ -130,7 +123,7 @@ const handleRemoveCardSubmit = (evt) => {
 
   removeCard(cardToDelete.id)
     .then(() => {
-      deleteCard(cardToDelete);
+      deleteCard(cardToDelete.element);
       closeModalWindow(removeCardModalWindow);
       cardToDelete = null;
     })
@@ -197,6 +190,18 @@ const handleLogoClick = () => {
     })
     .catch((err) => {
       console.log(err);
+    });
+};
+
+const handleLikeClick = (cardData, likeButton, cardLikeCounter) => {
+  const isLiked = likeCard(likeButton);
+  changeLikeCardStatus(cardData._id, !isLiked)
+    .then((updatedCardData) => {
+      cardLikeCounter.textContent = updatedCardData.likes.length;
+    })
+    .catch((err) => {
+      console.log(err);
+      likeCard(likeButton);
     });
 };
 
@@ -280,13 +285,10 @@ const handleCardFormSubmit = (evt) => {
         createCardElement(cardData, {
           onPreviewPicture: handlePreviewPicture,
           onLikeIcon: ({ likeButton, cardLikeCounter }) => {
-            const isLiked = likeCard(likeButton);
-            changeLikeCardStatus(cardData._id, !isLiked);
-            if (isLiked) plusLikeCount(cardLikeCounter);
-            else minusLikeCount(cardLikeCounter);
+            handleLikeClick(cardData, likeButton, cardLikeCounter);
           },
-          onDeleteCard: (cardElement) => {
-            handleDeleteCardClick(cardElement);
+          onDeleteCard: (cardElement, cardId) => {
+            handleDeleteCardClick(cardElement, cardId);
           },
           ownerID: cardData.owner._id,
         }),
@@ -355,13 +357,10 @@ Promise.all([getCardList(), getUserInfo()])
         createCardElement(cardData, {
           onPreviewPicture: handlePreviewPicture,
           onLikeIcon: ({ likeButton, cardLikeCounter }) => {
-            const isLiked = likeCard(likeButton);
-            changeLikeCardStatus(cardData._id, !isLiked);
-            if (isLiked) plusLikeCount(cardLikeCounter);
-            else minusLikeCount(cardLikeCounter);
+            handleLikeClick(cardData, likeButton, cardLikeCounter);
           },
-          onDeleteCard: (cardElement) => {
-            handleDeleteCardClick(cardElement);
+          onDeleteCard: (cardElement, cardId) => {
+            handleDeleteCardClick(cardElement, cardId);
           },
           ownerID: userData._id,
         }),

@@ -6,14 +6,6 @@ export const deleteCard = (cardElement) => {
   cardElement.remove();
 };
 
-export const plusLikeCount = (cardLikeCounter) => {
-  cardLikeCounter.textContent = +cardLikeCounter.textContent + 1;
-};
-
-export const minusLikeCount = (cardLikeCounter) => {
-  cardLikeCounter.textContent = cardLikeCounter.textContent - 1;
-};
-
 const getTemplate = () => {
   return document
     .getElementById("card-template")
@@ -33,7 +25,7 @@ export const createCardElement = (
   const cardImage = cardElement.querySelector(".card__image");
   const cardLikeCounter = cardElement.querySelector(".card__like-count");
 
-  cardElement.id = data._id;
+  //cardElement.id = data._id;
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardElement.querySelector(".card__title").textContent = data.name;
@@ -46,7 +38,9 @@ export const createCardElement = (
   }
 
   if (onDeleteCard) {
-    deleteButton.addEventListener("click", () => onDeleteCard(cardElement));
+    deleteButton.addEventListener("click", () =>
+      onDeleteCard(cardElement, data._id),
+    );
   }
 
   if (onPreviewPicture) {
