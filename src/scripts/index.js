@@ -194,14 +194,14 @@ const handleLogoClick = () => {
 };
 
 const handleLikeClick = (cardData, likeButton, cardLikeCounter) => {
-  const isLiked = likeCard(likeButton);
-  changeLikeCardStatus(cardData._id, !isLiked)
+  const isLiked = likeButton.classList.contains("card__like-button_is-active");
+  changeLikeCardStatus(cardData._id, isLiked)
     .then((updatedCardData) => {
+      likeCard(likeButton);
       cardLikeCounter.textContent = updatedCardData.likes.length;
     })
     .catch((err) => {
       console.log(err);
-      likeCard(likeButton);
     });
 };
 
